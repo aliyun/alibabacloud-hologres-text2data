@@ -1,0 +1,48 @@
+version: 0.1.0
+type: plugin
+author: hologres_dev
+name: hologres_text2data
+label:
+  en_US: hologres_text2data
+  ja_JP: hologres_text2data
+  zh_Hans: hologres_text2data
+  pt_BR: hologres_text2data
+description:
+  en_US: Fetching data from the database using natural language.
+  ja_JP: Fetching data from the database using natural language.
+  zh_Hans: 自然语言查询 Hologres 数据.
+  pt_BR: Fetching data from the database using natural language.
+icon: hologram.svg
+resource:
+  memory: 268435456
+  permission:
+    tool:
+      enabled: true
+    model:
+      enabled: true
+      llm: true
+      text_embedding: false
+      rerank: false
+      tts: false
+      speech2text: false
+      moderation: false
+    app:
+      enabled: true
+    storage:
+      enabled: true
+      size: 1048576
+plugins:
+  tools:
+    - provider/hologres_text2data.yaml
+meta:
+  version: 0.0.1
+  arch:
+    - amd64
+    - arm64
+  runner:
+    language: python
+    version: "3.12"
+    entrypoint: main
+created_at: 2025-03-13T22:33:07.708063231+08:00
+privacy: PRIVACY.md
+verified: false

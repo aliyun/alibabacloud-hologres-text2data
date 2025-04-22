@@ -1,0 +1,33 @@
+{# MySQL专用模板 #}
+{% extends "base_prompt.jinja" %}
+
+{% block optimization_rules %}
+1. 采用覆盖索引策略（Covering Index），确保查询命中至少2个索引
+2. 避免SELECT *，仅返回需求中的必要字段
+3. 对日期字段使用CURDATE()函数时需标注时间范围
+4. 多表关联必须使用INNER JOIN，禁止LEFT/RIGHT JOIN
+5. 必须使用{{ limit_clause }}进行结果限制，防止数据泄露风险
+6. 用户要求{{ limit }}条结果，禁止返回超过{{ limit }}条结果，添加LIMIT {{ limit }}，若{{limit}}为空或者 0，则添加LIMIT 100
+{% endblock %}
+
+{% block validation_rules %}
+1. 生成后自动检查表是否存在，若不存在则抛出错误
+2. 条件字段值必须存在于目标表中，否则提示字段不存在
+3. 自动生成EXPLAIN计划，确保type列显示为ref或eq_ref
+{% endblock %}
+
+{% block example_section %}
+## 输出示例：
+SELECT 
+    `order_id` AS 订单编号,
+    `amount` * 1.05 AS 含税金额  
+FROM 
+    `orders` o
+INNER JOIN 
+    `customers` c ON o.`customer_id` = c.`id`  
+WHERE 
+    o.`status` = 'paid' 
+    AND c.`region` = 'Asia'
+    AND o.`created_at` BETWEEN '2025-01-01' AND CURDATE()
+LIMIT 100;
+{% endblock %}
