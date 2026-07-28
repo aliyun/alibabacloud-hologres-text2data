@@ -46,6 +46,7 @@ The `Qwen2.5-72b-instruct` model is recommended. Other models can be tried indep
 - Removed the `cx-oracle` dependency. It has no prebuilt wheel for Python 3.12 and its source build fails (missing `pkg_resources`), which caused plugin installation to fail with `failed to install dependencies`. Supported databases: Hologres / PostgreSQL / MySQL / SQL Server.
 - Added explicit error handling for LLM invocation: timeouts/failures now surface a clear error message instead of failing silently.
 - Increased plugin `MAX_REQUEST_TIMEOUT` from 120s to 300s.
+- Bumped `cryptography` from 44.0.1 to 48.0.1 (security fixes for CVE-2026-26007, CVE-2026-34073, and the vulnerable OpenSSL bundled in earlier wheels).
 
 ### 0.1.0
 - Initial release.

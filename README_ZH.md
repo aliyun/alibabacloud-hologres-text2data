@@ -45,6 +45,7 @@
 - 移除 `cx-oracle` 依赖。该依赖在 Python 3.12 下没有预编译 wheel，源码构建时因缺少 `pkg_resources` 而失败，导致插件安装报 `failed to install dependencies` 错误。支持的数据库为 Hologres / PostgreSQL / MySQL / SQL Server。
 - 为 LLM 调用增加显式错误处理：超时/失败时会展示清晰的错误信息，不再静默失败。
 - 插件整体请求超时 `MAX_REQUEST_TIMEOUT` 由 120s 提高到 300s。
+- `cryptography` 由 44.0.1 升级到 48.0.1（修复 CVE-2026-26007、CVE-2026-34073 以及旧版 wheel 内置 OpenSSL 的安全漏洞）。
 
 ### 0.1.0
 - 初始版本。
