@@ -1,7 +1,7 @@
 # hologres_text2data
 
 **Author:** hologres_dev
-**Version:** 0.1.0
+**Version:** 0.1.1
 **Type:** tool
 
 ## Description
@@ -39,6 +39,15 @@
 | sql       | string   | 是   | SQL 查询语句                  |
 
 3. 点击执行，执行 sql 语句
+
+## 更新日志
+### 0.1.1
+- 移除 `cx-oracle` 依赖。该依赖在 Python 3.12 下没有预编译 wheel，源码构建时因缺少 `pkg_resources` 而失败，导致插件安装报 `failed to install dependencies` 错误。支持的数据库为 Hologres / PostgreSQL / MySQL / SQL Server。
+- 为 LLM 调用增加显式错误处理：超时/失败时会展示清晰的错误信息，不再静默失败。
+- 插件整体请求超时 `MAX_REQUEST_TIMEOUT` 由 120s 提高到 300s。
+
+### 0.1.0
+- 初始版本。
 
 # 声明
 本插件由阿里云开发，初版代码基于 [https://github.com/jaguarliuu/rookie_text2data](https://github.com/jaguarliuu/rookie_text2data) 项目。  

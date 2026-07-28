@@ -2,7 +2,7 @@
 # hologres_text2data  
 
 **Author:** hologres_dev  
-**Version:** 0.1.0  
+**Version:** 0.1.1  
 **Type:** Tool  
 
 ## Description  
@@ -40,6 +40,15 @@ The `Qwen2.5-72b-instruct` model is recommended. Other models can be tried indep
 | sql            | String     | Yes      | SQL query statement                |  
 
 3. Click "Execute" to run the SQL statement.
+
+## Changelog
+### 0.1.1
+- Removed the `cx-oracle` dependency. It has no prebuilt wheel for Python 3.12 and its source build fails (missing `pkg_resources`), which caused plugin installation to fail with `failed to install dependencies`. Supported databases: Hologres / PostgreSQL / MySQL / SQL Server.
+- Added explicit error handling for LLM invocation: timeouts/failures now surface a clear error message instead of failing silently.
+- Increased plugin `MAX_REQUEST_TIMEOUT` from 120s to 300s.
+
+### 0.1.0
+- Initial release.
 
 # NOTICE
 This plugin is developed by Alibaba Cloud and based on [https://github.com/jaguarliuu/rookie_text2data](https://github.com/jaguarliuu/rookie_text2data)  program.

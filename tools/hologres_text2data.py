@@ -1,4 +1,3 @@
-from cmath import e
 from collections.abc import Generator
 from typing import Any
 from dify_plugin import Tool
@@ -41,22 +40,25 @@ class HologresText2dataTool(Tool):
             user_custom_prompt=tool_parameters.get('custom_prompt', '')
         )
         print(f"System prompt:\n{system_prompt}")
-        response = self.session.model.llm.invoke(
-            model_config=LLMModelConfig(
-                provider=model_info.get('provider'),
-                model=model_info.get('model'),
-                mode=model_info.get('mode'),
-                completion_params=model_info.get('completion_params')
-            ),
-            prompt_messages=[
-                SystemPromptMessage(content=system_prompt),
-                UserPromptMessage(
-                    content=f"Database type: {tool_parameters['db_type']}\n"
-                            f"User requirement: {tool_parameters['query']}"
-                )
-            ],
-            stream=False
-        )
+        try:
+            response = self.session.model.llm.invoke(
+                model_config=LLMModelConfig(
+                    provider=model_info.get('provider'),
+                    model=model_info.get('model'),
+                    mode=model_info.get('mode'),
+                    completion_params=model_info.get('completion_params')
+                ),
+                prompt_messages=[
+                    SystemPromptMessage(content=system_prompt),
+                    UserPromptMessage(
+                        content=f"Database type: {tool_parameters['db_type']}\n"
+                                f"User requirement: {tool_parameters['query']}"
+                    )
+                ],
+                stream=False
+            )
+        except Exception as e:
+            raise ValueError(f"LLM invocation failed (possibly timed out), please check model availability and retry: {str(e)}")
         print(response)
         excute_sql = response.message.content
         if (isinstance(excute_sql, str)):
@@ -67,7 +69,7 @@ class HologresText2dataTool(Tool):
             else:
                 yield self.create_text_message(excute_sql)
         else:
-            yield self.create_text_message("Generation failed, please check if the input parameters are correct")
+            yield self.create_text_message("LLM returned non-text content, please check the model configuration")
 
     def _extract_sql_from_text(self, text: str) -> str:
         import re

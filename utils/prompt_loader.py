@@ -34,7 +34,6 @@ class PromptLoader:
     def _get_limit_clause(self, db_type: str) -> str:
         clauses = {
             'mysql': "LIMIT n",
-            'oracle': "ROWNUM <= n",
             'sqlserver': "TOP n",
             'hologres': "LIMIT n"
         }

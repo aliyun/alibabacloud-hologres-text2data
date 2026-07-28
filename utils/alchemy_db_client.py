@@ -4,7 +4,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from urllib.parse import quote_plus # For URL encoding
 
 # Define version constant
-APP_VERSION = "0.1.0"
+APP_VERSION = "0.1.1"
 
 def get_db_schema(
         db_type: str,
@@ -17,7 +17,7 @@ def get_db_schema(
 ) -> dict[str, Any] | None:
     """
     Get database table structure information
-    :param db_type: Database type (mysql/oracle/sqlserver/hologres)
+    :param db_type: Database type (mysql/sqlserver/hologres)
     :param host: Host address
     :param port: Port number
     :param database: Database name
@@ -30,7 +30,6 @@ def get_db_schema(
     # Build connection URL
     driver = {
         'mysql': 'pymysql',
-        'oracle': 'cx_oracle',
         'sqlserver': 'pymssql',
         'hologres': 'psycopg2'
     }.get(db_type.lower(), '')
@@ -56,7 +55,6 @@ def get_db_schema(
     # SQL statements for getting column comments
     column_comment_sql = {
         'mysql': f"SELECT COLUMN_COMMENT FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = '{database}' AND TABLE_NAME = :table_name AND COLUMN_NAME = :column_name",
-        'oracle': "SELECT COMMENTS FROM ALL_COL_COMMENTS WHERE TABLE_NAME = :table_name AND COLUMN_NAME = :column_name",
         'sqlserver': "SELECT CAST(ep.value AS NVARCHAR(MAX)) FROM sys.columns c LEFT JOIN sys.extended_properties ep ON ep.major_id = c.object_id AND ep.minor_id = c.column_id WHERE OBJECT_NAME(c.object_id) = :table_name AND c.name = :column_name",
         'hologres': """
                 SELECT
@@ -248,7 +246,7 @@ def execute_sql(
     Function to connect to different types of databases and execute SQL statements.
     
     Parameters:
-        db_type: Database type, e.g., 'mysql', 'oracle', 'sqlserver', 'hologres'
+        db_type: Database type, e.g., 'mysql', 'sqlserver', 'hologres'
         host: Database host address
         port: Database port number
         database: Database name
@@ -263,7 +261,6 @@ def execute_sql(
     """
     driver = {
         'mysql': 'pymysql',
-        'oracle': 'cx_oracle',
         'sqlserver': 'pymssql',
         'hologres': 'psycopg2'
     }.get(db_type.lower(), '')
